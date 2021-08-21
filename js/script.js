@@ -30,6 +30,44 @@ window.addEventListener("DOMContentLoaded", () => {
                 clearInterval(idSetInterval);
             }
         }
+        updateClock();
     }
-    countTimer("24 august 2021");
+    countTimer("22 august 2021");
+
+    // Menu
+    const toggleMenu = () => {
+        const btnMenu = document.querySelector(".menu");
+        const menu = document.querySelector("menu");
+        const closeBtn = document.querySelector(".close-btn");
+        const menuItems = menu.querySelectorAll("ul>li");
+
+        const handlerMenu = () => {
+            menu.classList.toggle("active-menu");
+        };
+
+        btnMenu.addEventListener("click", handlerMenu);
+        closeBtn.addEventListener("click", handlerMenu);
+
+        menuItems.forEach((element) => element.addEventListener("click", handlerMenu));
+    };
+
+    toggleMenu();
+
+    // Popup
+    const togglePopUp = () => {
+        const popup = document.querySelector(".popup");
+        const popupBtn = document.querySelectorAll(".popup-btn");
+        const popupCLose = document.querySelector(".popup-close");
+
+        popupBtn.forEach((element) => {
+            element.addEventListener("click", () => {
+                popup.style.display = "block";
+            });
+        });
+
+        popupCLose.addEventListener("click", () => {
+            popup.style.display = "none";
+        });
+    };
+    togglePopUp();
 });
