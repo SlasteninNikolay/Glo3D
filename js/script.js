@@ -92,24 +92,36 @@ const togglePopUp = () => {
 
     popupBtn.forEach((element) => {
         element.addEventListener("click", () => {
-            popup.style.display = "block"; // показываем подложку
             const screenWidth = document.documentElement.clientWidth;
             const popupContent = document.querySelector(".popup-content");
             const popupContentWidth = popupContent.clientWidth;
-            animate({
-                duration: 1000,
-                timing: bounceEaseOut,
-                draw: function (progress) {
-                    popupContent.style.left =
-                        progress * (screenWidth / 2 - popupContentWidth / 2) + 50 + "px";
-                },
-            });
+
+            if (screenWidth > 768) {
+                popup.style.display = "block"; // показываем подложку
+                animate({
+                    duration: 1000,
+                    timing: bounceEaseOut,
+                    draw: function (progress) {
+                        popupContent.style.left =
+                            progress * (screenWidth / 2 - popupContentWidth / 2) + 50 + "px";
+                    },
+                });
+            } else {
+                popup.style.display = "block"; // показываем подложку
+                popupContent.style.display = "block";
+            }
         });
     });
     popupClose.addEventListener("click", () => {
+        const screenWidth = document.documentElement.clientWidth;
         const popupContent = document.querySelector(".popup-content");
-        popupContent.style.left = "-100%";
-        popup.style.display = "none";
+        if (screenWidth > 768) {
+            popupContent.style.left = "-100%";
+            popup.style.display = "none";
+        } else {
+            popupContent.style.display = "none";
+            popup.style.display = "none";
+        }
     });
 };
 togglePopUp();
