@@ -691,10 +691,10 @@ footer .web {
     position: fixed;
     text-align: center;
     width: 40rem;
-    left: 38%;
+    left: 50%;
     top: 10%;
-    -webkit-transform: translateX(-50px);
-    transform: translateX(-50px);
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
     padding: 2rem 6rem;
     background-color: #24241f;
 }
