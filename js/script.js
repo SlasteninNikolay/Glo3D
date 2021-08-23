@@ -31,7 +31,7 @@ function countTimer(deadline) {
     }
     updateClock();
 }
-countTimer("22 august 2021");
+countTimer("24 august 2021");
 
 // Menu
 const toggleMenu = () => {
@@ -92,18 +92,18 @@ const togglePopUp = () => {
 
     popupBtn.forEach((element) => {
         element.addEventListener("click", () => {
+            popup.style.display = "block"; // показываем подложку
             const screenWidth = document.documentElement.clientWidth;
             const popupContent = document.querySelector(".popup-content");
             const popupContentWidth = popupContent.clientWidth;
 
             if (screenWidth > 768) {
-                popup.style.display = "block"; // показываем подложку
                 animate({
                     duration: 1000,
                     timing: bounceEaseOut,
                     draw: function (progress) {
                         popupContent.style.left =
-                            progress * (screenWidth / 2 - popupContentWidth / 2) + 50 + "px";
+                            progress * (screenWidth / 2 - popupContentWidth / 2 + 50) + "px";
                     },
                 });
             } else {
