@@ -55,8 +55,6 @@ const toggleMenu = () => {
             handlerMenu();
         } else if (target.classList.contains("close-btn")) {
             handlerMenu();
-        } else if (!target) {
-            handlerMenu();
         }
     });
 };
