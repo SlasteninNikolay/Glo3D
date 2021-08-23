@@ -37,6 +37,7 @@ countTimer("24 august 2021");
 const toggleMenu = () => {
     const btnMenu = document.querySelector(".menu");
     const menu = document.querySelector("menu");
+    const main = document.querySelector("main");
     const closeBtn = document.querySelector(".close-btn");
     const menuItems = menu.querySelectorAll("ul>li");
 
@@ -45,9 +46,19 @@ const toggleMenu = () => {
     };
 
     btnMenu.addEventListener("click", handlerMenu);
-    closeBtn.addEventListener("click", handlerMenu);
 
-    menuItems.forEach((element) => element.addEventListener("click", handlerMenu));
+    menu.addEventListener("click", (event) => {
+        let target = event.target;
+        console.log(target);
+
+        if (target.closest(".active-menu ul")) {
+            handlerMenu();
+        } else if (target.classList.contains("close-btn")) {
+            handlerMenu();
+        } else if (!target) {
+            handlerMenu();
+        }
+    });
 };
 
 toggleMenu();
@@ -56,7 +67,6 @@ toggleMenu();
 const togglePopUp = () => {
     const popup = document.querySelector(".popup");
     const popupBtn = document.querySelectorAll(".popup-btn");
-    const popupClose = document.querySelector(".popup-close");
 
     //PopUp Animation
     function animate({ timing, draw, duration }) {
@@ -112,10 +122,52 @@ const togglePopUp = () => {
             }
         });
     });
-    popupClose.addEventListener("click", () => {
+
+    popup.addEventListener("click", (event) => {
         const popupContent = document.querySelector(".popup-content");
-        popupContent.style.left = "";
-        popup.style.display = "none";
+        let target = event.target;
+        if (target.classList.contains("popup-close")) {
+            popupContent.style.left = "";
+            popup.style.display = "none";
+        } else {
+            target = target.closest(".popup-content");
+            if (!target) {
+                popupContent.style.left = "";
+                popup.style.display = "none";
+            }
+        }
     });
 };
 togglePopUp();
+
+// Tabs
+
+const tabs = () => {
+    const tabHeader = document.querySelector(".service-header");
+    const tab = tabHeader.querySelectorAll(".service-header-tab");
+    const tabContent = document.querySelectorAll(".service-tab");
+    const toggleTabContent = (index) => {
+        for (let i = 0; i < tabContent.length; i++) {
+            if (index === i) {
+                tab[i].classList.add("active");
+                tabContent[i].classList.remove("d-none");
+            } else {
+                tab[i].classList.remove("active");
+                tabContent[i].classList.add("d-none");
+            }
+        }
+    };
+    tabHeader.addEventListener("click", (event) => {
+        let target = event.target;
+        target = target.closest(".service-header-tab");
+
+        if (target) {
+            tab.forEach((item, i) => {
+                if (item === target) {
+                    toggleTabContent(i);
+                }
+            });
+        }
+    });
+};
+tabs();
