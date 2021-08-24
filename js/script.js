@@ -37,9 +37,6 @@ countTimer("13 november 2021");
 const toggleMenu = () => {
     const btnMenu = document.querySelector(".menu");
     const menu = document.querySelector("menu");
-    const main = document.querySelector("main");
-    const closeBtn = document.querySelector(".close-btn");
-    const menuItems = menu.querySelectorAll("ul>li");
 
     const handlerMenu = () => {
         menu.classList.toggle("active-menu");
@@ -48,8 +45,7 @@ const toggleMenu = () => {
     btnMenu.addEventListener("click", handlerMenu);
 
     menu.addEventListener("click", (event) => {
-        let target = event.target;
-        console.log(target);
+        const target = event.target;
 
         if (target.closest(".active-menu ul")) {
             handlerMenu();
@@ -175,7 +171,7 @@ tabs();
 const slider = () => {
     const slide = document.querySelectorAll(".portfolio-item");
     const slider = document.querySelector(".portfolio-content");
-    let dots = document.querySelector(".portfolio-dots");
+    const dots = document.querySelector(".portfolio-dots");
 
     let currentSlide = 0;
     let interval;
@@ -183,7 +179,7 @@ const slider = () => {
     const addPagination = () => {
         // Добавляем пагинацию
         for (let i = 0; i < slide.length; i++) {
-            let dot = document.createElement("li");
+            const dot = document.createElement("li");
             dot.classList.add("dot");
             if (i === 0) {
                 dot.classList.add("dot-active");
@@ -224,7 +220,7 @@ const slider = () => {
     slider.addEventListener("click", (event) => {
         event.preventDefault();
 
-        let target = event.target;
+        const target = event.target;
         if (!target.matches(".portfolio-btn, .dot")) {
             return;
         }
