@@ -174,13 +174,27 @@ tabs();
 
 const slider = () => {
     const slide = document.querySelectorAll(".portfolio-item");
-    const btn = document.querySelectorAll(".portfolio-btn");
-    const dot = document.querySelectorAll(".dot");
     const slider = document.querySelector(".portfolio-content");
+    let dots = document.querySelector(".portfolio-dots");
 
     let currentSlide = 0;
     let interval;
 
+    const addPagination = () => {
+        // Добавляем пагинацию
+        for (let i = 0; i < slide.length; i++) {
+            let dot = document.createElement("li");
+            dot.classList.add("dot");
+            if (i === 0) {
+                dot.classList.add("dot-active");
+            }
+            dots.appendChild(dot);
+        }
+    };
+
+    addPagination();
+
+    const dot = document.querySelectorAll(".dot");
     const prevSlide = (elem, index, strClass) => {
         elem[index].classList.remove(strClass);
     };
