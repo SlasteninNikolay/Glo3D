@@ -263,3 +263,61 @@ const slider = () => {
     startSlide(1500);
 };
 slider();
+
+// Change command photos
+
+const commandPhotos = document.querySelectorAll(".command__photo");
+
+commandPhotos.forEach((item) => {
+    const src = item.getAttribute("src");
+    item.addEventListener("mouseover", (event) => {
+        event.target.src = item.dataset.img;
+    });
+    item.addEventListener("mouseleave", (event) => {
+        event.target.src = src;
+    });
+});
+
+//Calculator
+
+document.addEventListener(
+    "input",
+    (event) => {
+        let target = event.target;
+        if (target.matches(".calc-item")) {
+            target.value = target.value.replace(/\D/g, "");
+        }
+        if (target.matches(".form-name, .form-message, .top-form, .mess")) {
+            target.value = target.value.replace(/[^а-я\-\s]/gi, "");
+        }
+        if (target.matches(".form-email")) {
+            target.value = target.value.replace(/[^a-z@_`\.\*\-!~]/gi, "");
+        }
+        if (target.matches(".form-phone")) {
+            target.value = target.value.replace(/[^\d-()]/gi, "");
+        }
+    },
+    { capture: true }
+);
+
+document.addEventListener(
+    "blur",
+    (event) => {
+        let target = event.target;
+        if (target.tagName === "INPUT") {
+            target.value = target.value.replace(/^\s+/gi, ""); //удаляем пробелы в начале
+            target.value = target.value.replace(/\s+$/gi, ""); //удаляем пробелы в концу
+            target.value = target.value.replace(/\s+/gi, " "); //заменяем пробелы на один пробел
+            target.value = target.value.replace(/^\-+/gi, ""); //удаляем дефисы в начале
+            target.value = target.value.replace(/\-+$/gi, ""); //удаляем дефисы в конце
+            target.value = target.value.replace(/\-+/gi, "-"); //заменяем дефисы на один
+            target.value = target.value.replace(/[^@_`\.\*\-!~\w\d\[а-я]]/gi, ""); //удаляем все символы кроме допустимых
+        }
+        if (target.matches(".form-name, .top-form")) {
+            target.value = target.value.replace(/([а-я])([а-я]+)/gi, (match, val1, val2) => {
+                return val1.toUpperCase() + val2.toLowerCase();
+            }); //приводим первый символ к верхнему регистру, остальные к нижнему
+        }
+    },
+    { capture: true }
+);
