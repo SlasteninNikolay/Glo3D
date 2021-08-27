@@ -278,7 +278,7 @@ commandPhotos.forEach((item) => {
     });
 });
 
-//Calculator
+//Calculator validation
 
 document.addEventListener(
     "input",
@@ -287,11 +287,11 @@ document.addEventListener(
         if (target.matches(".calc-item")) {
             target.value = target.value.replace(/\D/g, "");
         }
-        if (target.matches(".form-name, .form-message, .top-form, .mess")) {
+        if (target.matches(".form-name, .form-message, .mess")) {
             target.value = target.value.replace(/[^а-я\-\s]/gi, "");
         }
         if (target.matches(".form-email")) {
-            target.value = target.value.replace(/[^a-z@_`\.\*\-!~]/gi, "");
+            target.value = target.value.replace(/[^a-z\@_`\.\*\-!~]/gi, "");
         }
         if (target.matches(".form-phone")) {
             target.value = target.value.replace(/[^\d-()]/gi, "");
@@ -313,7 +313,7 @@ document.addEventListener(
             target.value = target.value.replace(/\-+/gi, "-"); //заменяем дефисы на один
             target.value = target.value.replace(/[^@_`\.\*\-!~\w\d\[а-я]]/gi, ""); //удаляем все символы кроме допустимых
         }
-        if (target.matches(".form-name, .top-form")) {
+        if (target.matches(".form-name") || target.matches(".top-form")) {
             target.value = target.value.replace(/([а-я])([а-я]+)/gi, (match, val1, val2) => {
                 return val1.toUpperCase() + val2.toLowerCase();
             }); //приводим первый символ к верхнему регистру, остальные к нижнему
@@ -321,3 +321,21 @@ document.addEventListener(
     },
     { capture: true }
 );
+
+//Calculator
+const calc = () => {
+    const calcBLock = document.querySelector(".calc-block");
+    const calcType = document.querySelector(".calc-type");
+    const calcSquare = document.querySelector(".calc-square");
+    const calcDay = document.querySelector(".calc-day");
+    const totalValue = document.getElementById("total");
+
+    calcBLock.addEventListener("change", (event) => {
+        const target = event.target;
+        if (target.matches("select") || target.matches("input")) {
+            console.log("1");
+        }
+    });
+};
+
+calc();
