@@ -321,21 +321,3 @@ document.addEventListener(
     },
     { capture: true }
 );
-
-//Calculator
-const calc = () => {
-    const calcBLock = document.querySelector(".calc-block");
-    const calcType = document.querySelector(".calc-type");
-    const calcSquare = document.querySelector(".calc-square");
-    const calcDay = document.querySelector(".calc-day");
-    const totalValue = document.getElementById("total");
-
-    calcBLock.addEventListener("change", (event) => {
-        const target = event.target;
-        if (target.matches("select") || target.matches("input")) {
-            console.log("1");
-        }
-    });
-};
-
-calc();
