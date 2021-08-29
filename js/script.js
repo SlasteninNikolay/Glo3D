@@ -287,14 +287,14 @@ document.addEventListener(
         if (target.matches(".calc-item")) {
             target.value = target.value.replace(/[^\d\.]/g, "");
         }
-        if (target.matches(".form-name, .form-message, .mess")) {
-            target.value = target.value.replace(/[^а-я\-\s]/gi, "");
-        }
+        // if (target.matches(".form-name, .form-message, .mess")) {
+        //     target.value = target.value.replace(/[^а-я\-\s]/gi, "");
+        // }
         if (target.matches(".form-email")) {
             target.value = target.value.replace(/[^a-z\@_`\.\*\-!~]/gi, "");
         }
         if (target.matches(".form-phone")) {
-            target.value = target.value.replace(/[^\d-()]/gi, "");
+            target.value = target.value.replace(/[^\+\d-()]/gi, "");
         }
     },
     { capture: true }
