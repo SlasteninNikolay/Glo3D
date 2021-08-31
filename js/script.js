@@ -389,7 +389,8 @@ calc(100);
 
 const sendForm = () => {
     const errorMessage = "Что-то пошло не так...";
-    const loadMessage = "Загрузка...";
+    const loadMessage = document.createElement("div");
+    loadMessage.classList.add("preloader");
     const successMessage = "Спасибо! Мы скоро с вами свяжемся!";
 
     const statusMessage = document.createElement("div");
@@ -425,9 +426,10 @@ const sendForm = () => {
         const target = event.target;
 
         if (target.tagName === "FORM") {
+            statusMessage.textContent = "";
             event.preventDefault();
             target.appendChild(statusMessage);
-            statusMessage.textContent = loadMessage;
+            statusMessage.appendChild(loadMessage);
             const formData = new FormData(target);
             const body = {};
             formData.forEach((val, key) => {
