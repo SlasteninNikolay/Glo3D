@@ -278,24 +278,24 @@ commandPhotos.forEach((item) => {
     });
 });
 
-//Calculator validation
+// Checking inputs
 
 document.addEventListener(
     "input",
     (event) => {
-        let target = event.target;
+        const target = event.target;
         if (target.matches(".calc-item")) {
             target.value = target.value.replace(/[^\d\.]/g, "");
         }
-        if (target.matches(".form-name, .form-message, .mess")) {
-            target.value = target.value.replace(/[^а-я\-\s]/gi, "");
-        }
+        // if (target.matches(".form-name, .mess")) {
+        //     target.value = target.value.replace(/[^а-я\-\s]/gi, "");
+        // }
         if (target.matches(".form-email")) {
-            target.value = target.value.replace(/[^a-z\@_`\.\*\-!~]/gi, "");
+            target.value = target.value.replace(/[^a-z@_`\.*\-!~]/gi, "");
         }
-        if (target.matches(".form-phone")) {
-            target.value = target.value.replace(/[^\d-()]/gi, "");
-        }
+        // if (target.matches(".form-phone")) {
+        //     target.value = target.value.replace(/[^\d-()\+]/gi, "");
+        // }
     },
     { capture: true }
 );
@@ -303,20 +303,21 @@ document.addEventListener(
 document.addEventListener(
     "blur",
     (event) => {
-        let target = event.target;
+        const target = event.target;
         if (target.tagName === "INPUT") {
             target.value = target.value.replace(/^\s+/gi, ""); //удаляем пробелы в начале
             target.value = target.value.replace(/\s+$/gi, ""); //удаляем пробелы в концу
             target.value = target.value.replace(/\s+/gi, " "); //заменяем пробелы на один пробел
-            target.value = target.value.replace(/^\-+/gi, ""); //удаляем дефисы в начале
-            target.value = target.value.replace(/\-+$/gi, ""); //удаляем дефисы в конце
-            target.value = target.value.replace(/\-+/gi, "-"); //заменяем дефисы на один
-            target.value = target.value.replace(/[^@_`\.\*\-!~\w\d\[а-я]]/gi, ""); //удаляем все символы кроме допустимых
+            target.value = target.value.replace(/^-+/gi, ""); //удаляем дефисы в начале
+            target.value = target.value.replace(/-+$/gi, ""); //удаляем дефисы в конце
+            target.value = target.value.replace(/-+/gi, "-"); //заменяем дефисы на один
+            target.value = target.value.replace(/[^@_`\.*\-!~\w\d[а-я]]/gi, ""); //удаляем все символы кроме допустимых
         }
         if (target.matches(".form-name") || target.matches(".top-form")) {
-            target.value = target.value.replace(/([а-я])([а-я]+)/gi, (match, val1, val2) => {
-                return val1.toUpperCase() + val2.toLowerCase();
-            }); //приводим первый символ к верхнему регистру, остальные к нижнему
+            target.value = target.value.replace(
+                /([а-я])([а-я]+)/gi,
+                (match, val1, val2) => val1.toUpperCase() + val2.toLowerCase()
+            ); //приводим первый символ к верхнему регистру, остальные к нижнему
         }
     },
     { capture: true }
@@ -326,7 +327,6 @@ document.addEventListener(
 const calc = (price = 100) => {
     const calcBlock = document.querySelector(".calc-block");
     const calcType = document.querySelector(".calc-type");
-    console.log("calcType: ", calcType);
     const calcSquare = document.querySelector(".calc-square");
     const calcDay = document.querySelector(".calc-day");
     const calcCount = document.querySelector(".calc-count");
@@ -357,7 +357,7 @@ const calc = (price = 100) => {
     };
 
     let id;
-    const animTotal = (total) => {
+    function animTotal(total) {
         //анимация подсчета итоговой суммы
         let count = 0;
         if (total > 0) {
@@ -370,7 +370,7 @@ const calc = (price = 100) => {
                 }
             }, 1);
         }
-    };
+    }
 
     calcBlock.addEventListener("change", (event) => {
         const target = event.target;
@@ -384,3 +384,121 @@ const calc = (price = 100) => {
 };
 
 calc(100);
+
+// send-AJAX-form
+
+const sendForm = () => {
+    const errorMessage = "Что-то пошло не так...";
+    const loadMessage = "Загрузка...";
+    const successMessage = "Спасибо! Мы скоро с вами свяжемся!";
+
+    const statusMessage = document.createElement("div");
+    statusMessage.style.cssText = "font-size: 2rem; color: #fff;";
+
+    const postData = (body, outputData, errorData) => {
+        const request = new XMLHttpRequest();
+        request.addEventListener("readystatechange", () => {
+            if (request.readyState !== 4) {
+                return;
+            }
+            if (request.status === 200) {
+                outputData();
+            } else {
+                errorData(request.status);
+            }
+        });
+        request.open("POST", "./server.php");
+        request.setRequestHeader("Content-Type", "application/json");
+        request.send(JSON.stringify(body));
+    };
+
+    const clearData = (event) => {
+        const target = event.target;
+        [...target.elements].forEach((item) => {
+            if (item.tagName === "INPUT") {
+                item.value = "";
+            }
+        });
+    };
+
+    document.addEventListener("submit", (event) => {
+        const target = event.target;
+
+        if (target.tagName === "FORM") {
+            event.preventDefault();
+            target.appendChild(statusMessage);
+            statusMessage.textContent = loadMessage;
+            const formData = new FormData(target);
+            const body = {};
+            formData.forEach((val, key) => {
+                body[key] = val;
+            });
+            postData(
+                body,
+                () => {
+                    statusMessage.textContent = successMessage;
+                },
+                (error) => {
+                    statusMessage.textContent = errorMessage;
+                    console.error(error);
+                }
+            );
+
+            clearData(event);
+        }
+    });
+};
+sendForm();
+
+// Validator
+document.addEventListener("input", (event) => {
+    const pattern = {
+        phone: /^\+?[78]([-()]*\d){10}$/,
+        name: /^[а-яё\s]+$/gi,
+        message: /^[а-яё\s\d\.!,;\-:]+$/gi,
+    };
+    const target = event.target;
+    const value = target.value;
+
+    const isValid = (number, rule) => rule.test(number);
+
+    const showSuccess = (input) => {
+        input.style.border = "2px solid green";
+    };
+
+    const showError = (input) => {
+        input.style.border = "2px solid red";
+    };
+
+    const blockSubmit = (input) => {
+        const form = input.closest("form");
+        const btn = form.querySelector("button");
+        btn.disabled = true;
+    };
+
+    const unblockSubmit = (input) => {
+        const form = input.closest("form");
+        const btn = form.querySelector("button");
+        btn.disabled = false;
+    };
+
+    const checkIt = (number, pattern, input) => {
+        if (isValid(number, pattern)) {
+            unblockSubmit(input);
+            showSuccess(input);
+        } else {
+            showError(input);
+            blockSubmit(input);
+        }
+    };
+
+    if (target.matches(".form-phone")) {
+        checkIt(value, pattern.phone, target);
+    }
+    if (target.matches(".form-name, #form2-name")) {
+        checkIt(value, pattern.name, target);
+    }
+    if (target.matches(".mess")) {
+        checkIt(value, pattern.message, target);
+    }
+});
