@@ -402,11 +402,9 @@ const sendForm = () => {
                 if (request.readyState !== 4) {
                     return;
                 }
-                if (request.status === 200) {
-                    statusMessage.textContent = successMessage;
+                if (request.status === 201) {
                     resolve();
                 } else {
-                    statusMessage.textContent = errorMessage;
                     reject("Ошибка при отправке данных: " + request.status);
                 }
             });
@@ -439,8 +437,15 @@ const sendForm = () => {
         });
 
         postData(body)
-            .then(() => clearData())
-            .catch((reason) => console.error(reason), clearData());
+            .then(() => {
+                statusMessage.textContent = successMessage;
+                clearData();
+            })
+            .catch((reason) => {
+                statusMessage.textContent = errorMessage;
+                console.log(reason);
+                clearData();
+            });
     });
 };
 
