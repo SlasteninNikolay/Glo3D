@@ -402,7 +402,7 @@ const sendForm = () => {
                 if (request.readyState !== 4) {
                     return;
                 }
-                if (request.status === 201) {
+                if (request.status === 200) {
                     resolve();
                 } else {
                     reject("Ошибка при отправке данных: " + request.status);
