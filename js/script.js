@@ -387,74 +387,64 @@ calc(100);
 
 // send-AJAX-form
 
-const errorMessage = "Что-то пошло не так...";
-const loadMessage = "Загрузка...";
-const successMessage = "Спасибо! Мы скоро с вами свяжемся!";
+const sendForm = () => {
+    const errorMessage = "Что-то пошло не так...";
+    const loadMessage = "Загрузка...";
+    const successMessage = "Спасибо! Мы скоро с вами свяжемся!";
 
-const statusMessage = document.createElement("div");
-statusMessage.style.cssText = "font-size: 2rem; color: #fff;";
+    const statusMessage = document.createElement("div");
+    statusMessage.style.cssText = "font-size: 2rem; color: #fff;";
 
-const postData = (body) => {
-    return new Promise((resolve, reject) => {
-        const request = new XMLHttpRequest();
-        console.log("request: ", request);
-        request.addEventListener("readystatechange", () => {
-            console.log("request: ", request);
-            if (request.readyState !== 4) {
-                return;
-            }
-            if (request.status === 200) {
-                statusMessage.textContent = successMessage;
-                resolve();
-            } else {
-                statusMessage.textContent = errorMessage;
-                reject("Ошибка при отправке данных: " + request.status);
-            }
+    const postData = (body) => {
+        return new Promise((resolve, reject) => {
+            const request = new XMLHttpRequest();
+            request.addEventListener("readystatechange", () => {
+                if (request.readyState !== 4) {
+                    return;
+                }
+                if (request.status === 200) {
+                    statusMessage.textContent = successMessage;
+                    resolve();
+                } else {
+                    statusMessage.textContent = errorMessage;
+                    reject("Ошибка при отправке данных: " + request.status);
+                }
+            });
+            request.open("POST", "./server.php");
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(JSON.stringify(body));
         });
-        request.open("POST", "./server.php");
-        request.setRequestHeader("Content-Type", "application/json");
-        request.send(JSON.stringify(body));
+    };
+
+    const clearData = () => {
+        const forms = document.querySelectorAll("form");
+        forms.forEach((item) => {
+            [...item.elements].forEach((element) => {
+                if (element.tagName === "INPUT") {
+                    element.value = "";
+                }
+            });
+        });
+    };
+
+    document.addEventListener("submit", (event) => {
+        const target = event.target;
+        event.preventDefault();
+        target.appendChild(statusMessage);
+        statusMessage.textContent = loadMessage;
+        const formData = new FormData(target);
+        const body = {};
+        formData.forEach((val, key) => {
+            body[key] = val;
+        });
+
+        postData(body)
+            .then(() => clearData())
+            .catch((reason) => console.error(reason), clearData());
     });
 };
 
-const clearData = () => {
-    const forms = document.querySelectorAll("form");
-    forms.forEach((item) => {
-        [...item.elements].forEach((element) => {
-            if (element.tagName === "INPUT") {
-                element.value = "";
-            }
-        });
-    });
-};
-
-const getData = () => {
-    return new Promise((resolve, reject) => {
-        document.addEventListener("submit", (event) => {
-            const target = event.target;
-
-            if (target.tagName === "FORM") {
-                event.preventDefault();
-                target.appendChild(statusMessage);
-                statusMessage.textContent = loadMessage;
-                const formData = new FormData(target);
-                console.log("formData: ", formData);
-                const body = {};
-                console.log("body: ", body);
-                formData.forEach((val, key) => {
-                    body[key] = val;
-                });
-
-                resolve(body);
-            } else {
-                event.preventDefault();
-                reject(errorMessage);
-            }
-        });
-    });
-};
-
-getData().then(postData).catch().finally(clearData);
+sendForm();
 
 // Validator
 document.addEventListener("input", (event) => {
