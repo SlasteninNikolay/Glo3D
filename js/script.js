@@ -396,22 +396,23 @@ const sendForm = () => {
     statusMessage.style.cssText = "font-size: 2rem; color: #fff;";
 
     const postData = (body) => {
-        return new Promise((resolve, reject) => {
-            const request = new XMLHttpRequest();
-            request.addEventListener("readystatechange", () => {
-                if (request.readyState !== 4) {
-                    return;
+        return fetch("./server.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        })
+            .then((response) => {
+                if (response.status !== 200) {
+                    throw new Error("status network is not 200");
                 }
-                if (request.status === 201) {
-                    resolve();
-                } else {
-                    reject("Ошибка при отправке данных: " + request.status);
-                }
+                statusMessage.textContent = successMessage;
+                clearData();
+            })
+            .catch((error) => {
+                statusMessage.textContent = errorMessage;
+                console.error(error);
+                clearData();
             });
-            request.open("POST", "./server.php");
-            request.setRequestHeader("Content-Type", "application/json");
-            request.send(JSON.stringify(body));
-        });
     };
 
     const clearData = () => {
@@ -435,17 +436,7 @@ const sendForm = () => {
         formData.forEach((val, key) => {
             body[key] = val;
         });
-
-        postData(body)
-            .then(() => {
-                statusMessage.textContent = successMessage;
-                clearData();
-            })
-            .catch((reason) => {
-                statusMessage.textContent = errorMessage;
-                console.log(reason);
-                clearData();
-            });
+        postData(body);
     });
 };
 
