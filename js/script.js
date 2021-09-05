@@ -395,26 +395,6 @@ const sendForm = () => {
     const statusMessage = document.createElement("div");
     statusMessage.style.cssText = "font-size: 2rem; color: #fff;";
 
-    const postData = (body) => {
-        return fetch("./server.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-        })
-            .then((response) => {
-                if (response.status !== 200) {
-                    throw new Error("status network is not 200");
-                }
-                statusMessage.textContent = successMessage;
-                clearData();
-            })
-            .catch((error) => {
-                statusMessage.textContent = errorMessage;
-                console.error(error);
-                clearData();
-            });
-    };
-
     const clearData = () => {
         const forms = document.querySelectorAll("form");
         forms.forEach((item) => {
@@ -423,6 +403,14 @@ const sendForm = () => {
                     element.value = "";
                 }
             });
+        });
+    };
+
+    const postData = (body) => {
+        return fetch("./server.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
         });
     };
 
@@ -436,7 +424,19 @@ const sendForm = () => {
         formData.forEach((val, key) => {
             body[key] = val;
         });
-        postData(body);
+        postData(body)
+            .then((response) => {
+                if (response.status !== 200) {
+                    throw new Error("status network is not 200");
+                }
+                statusMessage.textContent = successMessage;
+                clearData();
+            })
+            .catch((error) => {
+                statusMessage.textContent = errorMessage;
+                console.error(error);
+                clearData();
+            });
     });
 };
 
