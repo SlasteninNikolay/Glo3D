@@ -395,25 +395,6 @@ const sendForm = () => {
     const statusMessage = document.createElement("div");
     statusMessage.style.cssText = "font-size: 2rem; color: #fff;";
 
-    const postData = (body) => {
-        return new Promise((resolve, reject) => {
-            const request = new XMLHttpRequest();
-            request.addEventListener("readystatechange", () => {
-                if (request.readyState !== 4) {
-                    return;
-                }
-                if (request.status === 200) {
-                    resolve();
-                } else {
-                    reject("Ошибка при отправке данных: " + request.status);
-                }
-            });
-            request.open("POST", "./server.php");
-            request.setRequestHeader("Content-Type", "application/json");
-            request.send(JSON.stringify(body));
-        });
-    };
-
     const clearData = () => {
         const forms = document.querySelectorAll("form");
         forms.forEach((item) => {
@@ -422,6 +403,14 @@ const sendForm = () => {
                     element.value = "";
                 }
             });
+        });
+    };
+
+    const postData = (body) => {
+        return fetch("./server.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
         });
     };
 
@@ -435,15 +424,17 @@ const sendForm = () => {
         formData.forEach((val, key) => {
             body[key] = val;
         });
-
         postData(body)
-            .then(() => {
+            .then((response) => {
+                if (response.status !== 200) {
+                    throw new Error("status network is not 200");
+                }
                 statusMessage.textContent = successMessage;
                 clearData();
             })
-            .catch((reason) => {
+            .catch((error) => {
                 statusMessage.textContent = errorMessage;
-                console.log(reason);
+                console.error(error);
                 clearData();
             });
     });
