@@ -12,6 +12,7 @@ const sendForm = () => {
             [...item.elements].forEach((element) => {
                 if (element.tagName === "INPUT") {
                     element.value = "";
+                    element.style.border = "";
                 }
             });
         });
