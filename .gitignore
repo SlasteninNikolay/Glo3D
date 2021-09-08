@@ -1,2 +1,10 @@
-\node_modules
-\.vscode
+# Ignore the node_modules directory
+node_modules/
+
+*.hot-update.json
+*.hot-update.js
+
+# Ignore IDE specific files
+.idea/
+.vscode/
+*.sw*
