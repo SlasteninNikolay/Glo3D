@@ -11,7 +11,7 @@ const toggleMenu = () => {
     menu.addEventListener("click", (event) => {
         const target = event.target;
 
-        if (target.closest(".active-menu ul")) {
+        if (target.closest(".active-menu a")) {
             handlerMenu();
         } else if (target.classList.contains("close-btn")) {
             handlerMenu();

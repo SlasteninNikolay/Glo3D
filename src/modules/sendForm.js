@@ -8,6 +8,7 @@ const sendForm = () => {
 
     const clearData = () => {
         const forms = document.querySelectorAll("form");
+
         forms.forEach((item) => {
             [...item.elements].forEach((element) => {
                 if (element.tagName === "INPUT") {
@@ -15,6 +16,9 @@ const sendForm = () => {
                     element.style.border = "";
                 }
             });
+            setTimeout(() => {
+                statusMessage.innerHTML = "";
+            }, 4000);
         });
     };
 
@@ -36,6 +40,7 @@ const sendForm = () => {
         formData.forEach((val, key) => {
             body[key] = val;
         });
+
         postData(body)
             .then((response) => {
                 if (response.status !== 200) {

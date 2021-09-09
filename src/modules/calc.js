@@ -36,7 +36,7 @@ const calc = (price = 100) => {
         let count = 0;
         if (total > 0) {
             id = setInterval(() => {
-                count += 100;
+                count += 1000;
                 totalValue.textContent = count;
                 if (count >= total) {
                     clearInterval(id);
