@@ -10,6 +10,7 @@ import checkInputs from "./modules/checkInputs";
 import calc from "./modules/calc";
 import sendForm from "./modules/sendForm";
 import validator from "./modules/validator";
+import scroll from "./modules/scroll";
 
 // Timer
 countTimer("13 november 2021");
@@ -31,3 +32,5 @@ calc(100);
 sendForm();
 // Validator
 validator();
+// Smooth scroll
+scroll();
