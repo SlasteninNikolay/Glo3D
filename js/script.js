@@ -35,28 +35,25 @@ countTimer("24 august 2021");
 
 // Menu
 const toggleMenu = () => {
-    const btnMenu = document.querySelector(".menu");
     const menu = document.querySelector("menu");
-    const main = document.querySelector("main");
-    const closeBtn = document.querySelector(".close-btn");
-    const menuItems = menu.querySelectorAll("ul>li");
 
-    const handlerMenu = () => {
-        menu.classList.toggle("active-menu");
+    const handlerMenu = (e) => {
+        const target = e.target;
+        if (menu.classList.contains("active-menu") && !target.closest("menu")) {
+            menu.classList.toggle("active-menu");
+        }
+        if (target.closest(".menu")) {
+            menu.classList.toggle("active-menu");
+        }
+        if (target.matches(".close-btn")) {
+            menu.classList.toggle("active-menu");
+        }
+        if (target.matches("menu li a")) {
+            menu.classList.toggle("active-menu");
+        }
     };
 
-    btnMenu.addEventListener("click", handlerMenu);
-
-    menu.addEventListener("click", (event) => {
-        let target = event.target;
-        console.log(target);
-
-        if (target.closest(".active-menu ul")) {
-            handlerMenu();
-        } else if (target.classList.contains("close-btn")) {
-            handlerMenu();
-        }
-    });
+    document.body.addEventListener("click", handlerMenu);
 };
 
 toggleMenu();
